@@ -24,7 +24,8 @@ _load_dotenv(PROJECT_ROOT / ".env")
 
 @dataclass(frozen=True)
 class Settings:
-    app_host: str = os.getenv("APP_HOST", "127.0.0.1")
+    # On a hosting platform (Render sets PORT) listen on all interfaces; locally only on this computer.
+    app_host: str = os.getenv("APP_HOST") or ("0.0.0.0" if os.getenv("PORT") else "127.0.0.1")
     # PORT is set by hosting platforms such as Render; APP_PORT is for local use.
     app_port: int = int(os.getenv("PORT") or os.getenv("APP_PORT", "8000"))
     app_version: str = os.getenv("APP_VERSION", "4.0.0")
