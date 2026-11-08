@@ -62,6 +62,8 @@ class Settings:
     calendarific_api_key: str = os.getenv("CALENDARIFIC_API_KEY", "")
     holiday_country: str = os.getenv("HOLIDAY_COUNTRY", "IN")
     holiday_location: str = os.getenv("HOLIDAY_LOCATION", "")                           # e.g. "in-ka" (optional)
+    # The kitchen's own time zone, so the live clock is right on a server in another zone (Render runs on UTC).
+    kitchen_timezone: str = os.getenv("KITCHEN_TIMEZONE", "Asia/Kolkata")
 
     # LLM settings (LangChain ChatOpenAI). Provider: openai | none (none = rule-based agents)
     llm_provider: str = os.getenv("LLM_PROVIDER", "openai").strip().lower()

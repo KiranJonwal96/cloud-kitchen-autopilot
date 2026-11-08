@@ -14,7 +14,7 @@ from pydantic import ValidationError
 
 from app.agents import guardrails
 from app.agents.base import AgentError, call_llm, call_tool
-from app.agents.demand_agent import DemandAgent
+from app.agents.demand_agent import CLOSING_HOUR, OPENING_HOUR, DemandAgent
 from app.agents.operations_agent import OperationsAgent
 from app.config import settings
 from app.graph import finalize
@@ -84,6 +84,10 @@ def make_nodes(llm):
                       "status": "ok" if check["ok"] else check["status"],
                       "detail": check["reason"], "duration_ms": 0})
         current = call_tool(trace, "order_api.current", data_tools.get_current_orders)
+        if check["ok"] and not OPENING_HOUR <= current["current_hour"] <= CLOSING_HOUR:
+            check = {**check, "ok": False, "status": "needs_clarification", "reason": (
+                f"The kitchen is closed at {current['current_hour']:02d}:00 (open {OPENING_HOUR}:00-{CLOSING_HOUR}:00), "
+                "so there is no demand to plan for right now. Pick an hour in 'Simulate a time' and ask again.")}
         horizon, assumptions = guardrails.parse_horizon(
             check["cleaned"], state.get("explicit_horizon"), current["current_hour"],
             settings.default_horizon_hours, settings.max_horizon_hours)

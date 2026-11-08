@@ -14,6 +14,7 @@ import urllib.error
 import urllib.parse
 import urllib.request
 from datetime import date, datetime
+from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
 
 from app.config import settings
 from app.db import DEFAULT_SIM_STATE, HOURLY_BASE_ORDERS, WEEKDAY_FACTOR, get_connection
@@ -47,7 +48,7 @@ def get_sim_state() -> dict:
     stored = json.loads(row["state_json"])
     incidents = {**DEFAULT_SIM_STATE["incidents"], **(stored.get("incidents") or {})}
     state = {**DEFAULT_SIM_STATE, **stored, "incidents": incidents}
-    now = datetime.now()
+    now = kitchen_now()
     state["business_date"] = state["simulated_date"] or now.date().isoformat()
     state["current_hour"] = now.hour if state["simulated_hour"] is None else int(state["simulated_hour"])
     return state
@@ -74,6 +75,14 @@ def update_sim_state(changes: dict) -> dict:
     with get_connection() as conn:
         conn.execute("UPDATE sim_state SET state_json = ? WHERE id = 1", (json.dumps(state),))
     return get_sim_state()
+
+
+def kitchen_now() -> datetime:
+    """The current time in the kitchen's time zone (KITCHEN_TIMEZONE, default Asia/Kolkata)."""
+    try:
+        return datetime.now(ZoneInfo(settings.kitchen_timezone))
+    except (ZoneInfoNotFoundError, ValueError):
+        return datetime.now()  # e.g. Windows without time-zone data: use the computer's clock
 
 
 def _check_outage(state: dict, incident: str, tool_name: str) -> None:
