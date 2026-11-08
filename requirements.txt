@@ -1,0 +1,12 @@
+# Web server
+fastapi>=0.110                    # REST API + interactive docs at /docs
+uvicorn>=0.29                     # ASGI server that runs FastAPI
+
+# Multi-agent framework stack
+langgraph>=0.3                    # StateGraph: multi-agent workflow with run-time routing
+langchain-core>=0.3               # messages, structured output, Runnable interface
+langchain-openai>=0.3             # ChatOpenAI
+langsmith>=0.3                    # tracing (@traceable) and LangSmith observability
+pydantic>=2.0                     # RouteDecision schema for structured output
+chromadb>=0.5                     # vector database for RAG (local embedding model, no key)
+mcp>=2.0,<3                       # MCP server (official Python SDK v2: MCPServer)

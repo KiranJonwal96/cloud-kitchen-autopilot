@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Cloud Kitchen Autopilot</title>
+  <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+  <header class="topbar">
+    <div>
+      <h1>Cloud Kitchen Autopilot</h1>
+      <p class="subtitle">AI agents that tell you which orders you can't fulfil, and what to do about it</p>
+    </div>
+    <span id="llm-status" class="badge">Checking AI…</span>
+  </header>
+
+  <main class="page">
+    <section class="card">
+      <h2>1. Data</h2>
+      <p id="sources" class="muted">Checking data sources…</p>
+
+      <h3>Simulate an incident <span class="muted">(optional, for demos and testing)</span></h3>
+      <div class="incidents">
+        <button type="button" data-incident="rain">Heavy rain</button>
+        <button type="button" data-incident="festival">Festival</button>
+        <button type="button" data-incident="cricket_match">Cricket match</button>
+        <button type="button" data-incident="order_rush">Order rush</button>
+      </div>
+      <div class="incidents">
+        <button type="button" data-incident="weather_api_down">Weather API down</button>
+        <button type="button" data-incident="holiday_api_down">Holiday API down</button>
+        <button type="button" data-incident="inventory_api_down">Inventory API down</button>
+      </div>
+      <div class="incidents">
+        <label>Simulate a date <input type="date" id="sim-date"></label>
+        <label>Simulate a time
+          <select id="sim-hour"><option value="">Now</option><option value="10">10:00</option><option value="11">11:00</option><option value="12">12:00</option><option value="13">13:00</option><option value="14">14:00</option><option value="15">15:00</option><option value="16">16:00</option><option value="17">17:00</option><option value="18">18:00</option><option value="19">19:00</option><option value="20">20:00</option><option value="21">21:00</option><option value="22">22:00</option><option value="23">23:00</option></select>
+        </label>
+      </div>
+      <div class="incidents">
+        <button type="button" id="busy-evening">Busy evening (19:00, rain + match + rush)</button>
+        <button type="button" id="back-to-live">Back to live data (today)</button>
+      </div>
+
+      <h2 class="spaced">2. Ask a question</h2>
+      <form id="ask-form" class="ask">
+        <textarea id="question" rows="2" maxlength="500">Can we handle the expected demand for the next 2 hours? If not, what should we do?</textarea>
+        <button type="submit" id="ask-button" class="primary">Get suggestions</button>
+      </form>
+    </section>
+
+    <div id="result"></div>
+  </main>
+
+  <div id="toast" class="toast hidden" role="status"></div>
+  <script src="/static/app.js"></script>
+</body>
+</html>

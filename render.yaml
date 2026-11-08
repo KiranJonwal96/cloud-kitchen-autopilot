@@ -1,0 +1,30 @@
+# Render blueprint: New > Blueprint in the Render dashboard, then pick this repository.
+services:
+  - type: web
+    name: cloud-kitchen-autopilot
+    runtime: python
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: python run.py
+    healthCheckPath: /health
+    envVars:
+      - key: APP_HOST
+        value: 0.0.0.0          # listen on all interfaces; Render sets PORT automatically
+      - key: PYTHON_VERSION
+        value: 3.12.7
+      - key: LLM_PROVIDER
+        value: openai
+      - key: LLM_MODEL
+        value: gpt-4o-mini
+      - key: OPENAI_API_KEY
+        sync: false             # entered in the Render dashboard, never stored in the repo
+      - key: BASIC_AUTH_USER
+        sync: false             # password-protects the public site
+      - key: BASIC_AUTH_PASSWORD
+        sync: false
+      - key: LANGSMITH_TRACING
+        value: "false"
+      - key: LANGSMITH_API_KEY
+        sync: false
+# Note: the free plan has no persistent disk. The demo database and vector index
+# are recreated on each restart (the app re-seeds and re-indexes automatically).
