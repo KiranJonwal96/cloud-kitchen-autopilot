@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Cloud Kitchen Autopilot: a multi-agent AI system
 
 AI agents that tell a cloud-kitchen supervisor **which orders the kitchen can't fulfil in the next few
@@ -259,3 +260,7 @@ dynamic prompts, MCP, live weather and holidays (mocked), simulated incidents an
 | Model not found | Set `LLM_MODEL` to a model your account allows |
 | Port 8000 in use | Add `APP_PORT=8001` to `.env` |
 | "Knowledge base not available" | The first start needs internet for the embedding model |
+=======
+# cloud-kitchen-autopilot
+Agentic AI based cloud kitchen automation
+>>>>>>> 0c110572ee2163f4573ec9cc22ffb8499b6f6105
